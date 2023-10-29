@@ -1,0 +1,98 @@
+配置信息		类型
+batch sending condition	BatchSize	int
+	TotalDataSize	int
+每隔1s发送InjectSpeed笔交易给各个分片	InjectSpeed	int
+block size，一次打包交易的大小	MaxBlockSize_global	uint64
+主节点从交易池中打包时间的间隔	BlockInterval/ms	int
+127.0.0.1:18800	ip_supervisor	string
+		
+	Ip_nodetable	map[uint64]string
+	TcpLock	sync.Mutex
+	FileM	*os.File
+./log/	LogWrite_path	string
+./result/	DataWrite_path	string
+	BrokerNum	int
+	Partition_shardnum	int
+主节点打包区块的时间	Generate_block	int
+共识时间	Consensus	int
+共识完成之后上链的时间	On_blockchain	int
+		
+		
+		
+Supervisor	partitionLock	sync.Mutex
+	ModifiedMap	map[string]uint64
+		
+	sl	*slog.SupervisorLog
+	itxnum	uint64
+	ctxnum	uint64
+		
+	measureRes	measureRes *partition.MeasureRes
+	arriveRateTable	[]float64
+	queueTable	[]int
+		
+		
+Node	sid	uint64
+	Txpool	*partition.TxPool
+	requestPool	map[string]*partition.Request
+	requested	chan []byte
+	inbox	chan []byte
+	sequenceID	uint64
+	PartitionMap	map[string]uint64
+	pmlock	sync.RWMutex
+	nl	*nlog.PbftLog
+		
+PbftLog	Plog	*log.Logger
+SupervisorLog	Slog	*log.Logger
+		
+		
+SimpleTx	Recipient	string
+	Sender	string
+	Nonce	uint64
+		
+	TxHash	[]byte
+交易放进交易池的时间	Time	time.Time
+	Relayed	bool
+		
+		
+TxPool	TxQueue	[]*SimpleTX
+	RelayPool	map[uint64][]*SimpleTX
+	lock	sync.Mutex
+	ArrivalHistory	[]time.Time
+		
+		
+InjectTxs	Txs	[]*SimpleTX
+	ToShardID	uint64
+		
+Request	Msg	[]byte
+区块开始共识的时间	ReqTime	time.Time
+		
+Commit	Digest	[]byte
+	SeqID	uint64
+		
+BlockInfoMsg	BlockBodyLength	int
+	ExcutedTxs	[]*SimpleTX
+同reqtime	ProposeTime	time.Time
+区块reply给客户端的时间	CommitTime	time.Time
+	SenderShardID	uint64
+		
+	Relay1TxNum	uint64
+	Relay1Txs	[]*SimpleTX
+		
+	ArriveRate	float64
+	Queuelen	int
+		
+		
+MeasureRes	excutedTxNum	float64
+	relayTx	map[string]bool
+	startTime	time.Time
+	endTime	time.Time
+		
+	latency	float64
+	txNum	float64
+		
+	totTxNum	float64
+	totCtxNum	float64
+	relayTxRecord	map[string]bool
+		
+	arriveRateTable	[]float64
+	queueTable	[]int
